@@ -4,12 +4,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Optional;
 
 @RequestMapping("book")
 @RestController
 public class BookController {
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
 
     public BookController(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -27,9 +26,9 @@ public class BookController {
 
     @PutMapping("{id}")
     private Book updateBook(@RequestBody Book book, @PathVariable @NotNull String id) throws Exception {
-        Book optionalBook = bookRepository.findById(id)
-                                          .orElseThrow(() -> new Exception("No Book found"));
-        book.setId(id);
+        Book bookFound = bookRepository.findById(id)
+                                       .orElseThrow(() -> new Exception("No Book found"));
+        book.setId(bookFound.getId());
         return bookRepository.save(book);
     }
 }
