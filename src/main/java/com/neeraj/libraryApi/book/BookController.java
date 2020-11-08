@@ -1,5 +1,6 @@
 package com.neeraj.libraryApi.book;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ public class BookController {
         this.bookRepository = bookRepository;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     private Book addBook(@RequestBody Book book) {
         return bookRepository.save(book);

@@ -17,4 +17,15 @@ public class Book extends AppBaseModel {
     private Double pricePerDay;
     private Double penaltyPerDay;
     private List<String> categories = new ArrayList<>();
+    public Book(String title,
+                String isbn,
+                Double pricePerDay,
+                Double penaltyPerDay,
+                List<String> categories) {
+        this.title = title;
+        this.isbn = isbn;
+        this.pricePerDay = pricePerDay;
+        this.penaltyPerDay = penaltyPerDay;
+        this.categories = categories;
+    }
 }
