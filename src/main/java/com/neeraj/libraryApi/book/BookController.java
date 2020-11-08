@@ -19,8 +19,12 @@ public class BookController {
         return bookRepository.save(book);
     }
 
+
     @GetMapping
-    private List<Book> getBooks() {
+    private List<Book> getBooks(@RequestParam(required = false) List<String> categories) {
+        if (categories != null) {
+            return bookRepository.findByCategoriesLike(categories);
+        }
         return bookRepository.findAll();
     }
 
