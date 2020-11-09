@@ -1,40 +1,39 @@
 package com.neeraj.libraryApi.book;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RequestMapping("book")
 @RestController
 public class BookController {
-    private final BookRepository bookRepository;
+    private final BookService bookService;
 
-    public BookController(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    private Book addBook(@RequestBody Book book) {
-        return bookRepository.save(book);
+    private BookDTO create(@RequestBody BookDTO bookDTO) {
+        return bookService.createBook(bookDTO);
     }
 
 
     @GetMapping
-    private List<Book> getBooks(@RequestParam(required = false) List<String> categories) {
-        if (categories != null) {
-            return bookRepository.findByCategoriesLike(categories);
-        }
-        return bookRepository.findAll();
+    private List<BookDTO> list(@RequestParam(required = false) List<String> categories) {
+        return bookService.getBooks(categories);
+    }
+
+    @GetMapping("{id}")
+    private BookDTO retrieve(@PathVariable @NotNull String id) {
+        return bookService.findById(id);
     }
 
     @PutMapping("{id}")
-    private Book updateBook(@RequestBody Book book, @PathVariable @NotNull String id) throws Exception {
-        Book bookFound = bookRepository.findById(id)
-                                       .orElseThrow(() -> new Exception("No Book found"));
-        book.setId(bookFound.getId());
-        return bookRepository.save(book);
+    private BookDTO update(@PathVariable @NotNull String id, @RequestBody BookDTO book) {
+        return bookService.updateBook(id, book);
     }
 }
